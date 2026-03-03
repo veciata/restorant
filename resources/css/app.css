@@ -8,4 +8,125 @@
         'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
         'Noto Color Emoji';
+
+    /* Custom theme colors for dark/light mode */
+    --color-light-bg: #ffffff;
+    --color-light-surface: #fef7ed;
+    --color-light-text: #111827;
+    --color-light-text-secondary: #6b7280;
+    --color-light-border: #e5e7eb;
+    
+    --color-dark-bg: #09090b;
+    --color-dark-surface: #18181b;
+    --color-dark-text: #ffffff;
+    --color-dark-text-secondary: #d1d5db;
+    --color-dark-border: #27272a;
+
+    @keyframes marquee {
+        from {
+            transform: translateX(0);
+        }
+        to {
+            transform: translateX(-50%);
+        }
+    }
+}
+
+/* Dark mode theme overrides using CSS custom properties */
+html.dark {
+    --color-bg: var(--color-dark-bg);
+    --color-surface: var(--color-dark-surface);
+    --color-text: var(--color-dark-text);
+    --color-text-secondary: var(--color-dark-text-secondary);
+    --color-border: var(--color-dark-border);
+}
+
+html:not(.dark) {
+    --color-bg: var(--color-light-bg);
+    --color-surface: var(--color-light-surface);
+    --color-text: var(--color-light-text);
+    --color-text-secondary: var(--color-light-text-secondary);
+    --color-border: var(--color-light-border);
+}
+
+/* Apply theme colors to common classes */
+.bg-white {
+    background-color: var(--color-bg);
+}
+
+.bg-orange-50 {
+    background-color: var(--color-surface);
+}
+
+.bg-gray-50 {
+    background-color: var(--color-surface);
+}
+
+.bg-zinc-50 {
+    background-color: var(--color-surface);
+}
+
+.text-gray-900,
+.text-zinc-950 {
+    color: var(--color-text);
+}
+
+.text-gray-500,
+.text-gray-600,
+.text-gray-700 {
+    color: var(--color-text-secondary);
+}
+
+.border-gray-100,
+.border-zinc-100 {
+    border-color: var(--color-border);
+}
+
+.border-zinc-200 {
+    border-color: var(--color-border);
+}
+
+.bg-white\/80 {
+    background-color: color-mix(in srgb, var(--color-bg) 80%, transparent);
+}
+
+.dark\:bg-black\/80 {
+    background-color: color-mix(in srgb, var(--color-dark-bg) 80%, transparent);
+}
+
+/* Menu page specific overrides */
+.bg-zinc-900 {
+    background-color: var(--color-text);
+}
+
+.text-gray-400 {
+    color: var(--color-text-secondary);
+}
+
+/* Additional background fixes */
+.bg-zinc-100 {
+    background-color: var(--color-surface);
+}
+
+.bg-zinc-800 {
+    background-color: var(--color-border);
+}
+
+/* Semi-transparent backgrounds */
+.bg-white\/90 {
+    background-color: color-mix(in srgb, var(--color-bg) 90%, transparent);
+}
+
+.bg-white\/95 {
+    background-color: color-mix(in srgb, var(--color-bg) 95%, transparent);
+}
+
+@layer utilities {
+    .animate-marquee {
+        animation: marquee 30s linear infinite;
+    }
+
+    .glass-card {
+        @apply backdrop-blur-3xl bg-white/40 dark:bg-black/40 border border-white/20 dark:border-white/5;
+    }
 }

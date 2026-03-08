@@ -22,25 +22,40 @@ class HasRole
 
         $user = Auth::user();
 
+        // Parse allowed roles - split on pipe instead of comma
+        $allowedRoles = array_map('trim', explode('|', $roles));
+
+        // Get user role as string
+        $userRoleString = $user->role instanceof \App\Enums\UserRole
+            ? $user->role->value
+            : (string) $user->role;
+
         // Debug logging
-        \Log::info('HasRole Middleware Check', [
+        \Log::info('HasRole Check', [
             'user_id' => $user->id,
-            'user_role' => $user->role,
-            'required_roles' => $roles,
+            'user_role_raw' => $user->role,
+            'user_role_string' => $userRoleString,
+            'roles_param' => $roles,
+            'allowed_roles' => $allowedRoles,
+            'is_allowed' => in_array($userRoleString, $allowedRoles),
+            'path' => $request->path(),
         ]);
 
-        // Support multiple roles separated by commas
-        $allowedRoles = explode(',', $roles);
-        $allowedRoles = array_map('trim', $allowedRoles);
-
-        \Log::info('Parsed allowed roles', ['roles' => $allowedRoles]);
-
-        if (! in_array($user->role, $allowedRoles)) {
-            \Log::info('Access denied', ['user_role' => $user->role, 'allowed' => $allowedRoles]);
-            abort(403, 'Unauthorized access');
+        if (! in_array($userRoleString, $allowedRoles)) {
+            \Log::error('ACCESS DENIED', [
+                'user_id' => $user->id,
+                'user_role_string' => $userRoleString,
+                'allowed_roles' => $allowedRoles,
+                'request_path' => $request->path(),
+            ]);
+            abort(403, 'Unauthorized access - Role: ' . $userRoleString . ', Required: ' . implode(',', $allowedRoles));
         }
 
-        \Log::info('Access granted');
+        \Log::info('ACCESS GRANTED', [
+            'user_id' => $user->id,
+            'user_role' => $userRoleString,
+            'request_path' => $request->path(),
+        ]);
 
         return $next($request);
     }

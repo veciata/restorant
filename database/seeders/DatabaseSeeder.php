@@ -15,6 +15,9 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             MenuItemSeeder::class,
             TableSeeder::class,
+            WorkingHoursSeeder::class,
+            DemoUsersSeeder::class,
+            DemoBookingsSeeder::class,
             UserSeeder::class,
         ]);
     }

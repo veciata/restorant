@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Head, usePage, useForm } from '@inertiajs/react';
 import Layout from '../components/Layout';
 import { motion } from 'framer-motion';
@@ -6,7 +6,20 @@ import { Plus, Minus, ShoppingCart, Utensils, MapPin, CheckCircle, X } from 'luc
 
 export default function MakeOrder() {
     const { menuItems, tables } = usePage().props as any;
-    const [cart, setCart] = useState<any[]>([]);
+    const [cart, setCart] = useState<any[]>(() => {
+        // Load cart from localStorage on component mount
+        if (typeof window !== 'undefined') {
+            const savedCart = localStorage.getItem('cart');
+            if (savedCart) {
+                try {
+                    return JSON.parse(savedCart);
+                } catch (e) {
+                    return [];
+                }
+            }
+        }
+        return [];
+    });
     const [selectedTable, setSelectedTable] = useState('');
 
     const { data, setData, post, processing, errors } = useForm<{
@@ -18,6 +31,15 @@ export default function MakeOrder() {
         table_id: '',
         notes: '',
     });
+
+    // Save cart to localStorage whenever it changes
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('cart', JSON.stringify(cart));
+            // Dispatch custom event to notify navbar of cart changes
+            window.dispatchEvent(new CustomEvent('cartUpdate'));
+        }
+    }, [cart]);
 
     const addToCart = (menuItem: any) => {
         const existingItem = cart.find(item => item.menu_item_id === menuItem.id);
@@ -86,7 +108,14 @@ export default function MakeOrder() {
             notes: data.notes,
         });
 
-        post('/make-order');
+        post('/make-order', {
+            onSuccess: () => {
+                // Clear cart after successful order
+                setCart([]);
+                localStorage.removeItem('cart');
+                window.dispatchEvent(new CustomEvent('cartUpdate'));
+            }
+        });
     };
 
     return (

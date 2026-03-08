@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\SiteSettings;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -35,12 +36,21 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $siteSettings = SiteSettings::first();
+        $workingHours = $siteSettings?->working_hours ?? [
+            'mon_thu' => ['start' => '11:00', 'end' => '22:00'],
+            'fri_sat' => ['start' => '11:00', 'end' => '23:30'],
+            'sunday' => ['start' => '12:00', 'end' => '21:00']
+        ];
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
                 'user' => $request->user(),
             ],
+            'url' => $request->getPathInfo(),
+            'workingHours' => $workingHours,
         ];
     }
 }

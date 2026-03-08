@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewOrderCreated;
+use App\Events\OrderStatusUpdated;
 use App\Models\MenuItem;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Table;
+use App\Models\Testimonial;
 use Illuminate\Http\Request;
 
 class OrdersController extends Controller
@@ -16,16 +19,19 @@ class OrdersController extends Controller
     public function index()
     {
         $orders = Order::where('user_id', auth()->id())
-            ->with(['items.menuItem', 'waiter', 'table'])
+            ->with(['items.menuItem', 'waiter', 'table', 'testimonials'])
             ->orderBy('created_at', 'desc')
             ->get()
             ->map(function ($order) {
                 return [
                     'id' => 'ORD-'.str_pad($order->id, 4, '0', STR_PAD_LEFT),
+                    'numeric_id' => $order->id, // Add numeric ID for testimonial route
                     'date' => $order->created_at->format('Y-m-d'),
                     'time' => $order->created_at->format('g:i A'),
                     'status' => $order->status,
                     'total' => $order->total_price,
+                    'has_testimonial' => $order->testimonials->isNotEmpty(), // Check if testimonial exists
+                    'testimonial' => $order->testimonials->first(), // Get the first testimonial if exists
                     'items' => $order->items->map(function ($item) {
                         return [
                             'name' => $item->menuItem->name ?? 'Unknown Item',
@@ -189,6 +195,9 @@ class OrdersController extends Controller
             ]);
         }
 
+        // Broadcast new order event
+        event(new NewOrderCreated($order));
+
         return redirect()->route('orders')->with('success', 'Order placed successfully!');
     }
 
@@ -201,10 +210,45 @@ class OrdersController extends Controller
             'status' => 'required|in:pending,preparing,ready,delivered,cancelled',
         ]);
 
+        $oldStatus = $order->status;
         $order->update([
             'status' => $request->status,
         ]);
 
+        // Broadcast the status update event
+        event(new OrderStatusUpdated($order, $oldStatus, $request->status));
+
         return back()->with('success', "Order #{$order->id} status updated to {$request->status}!");
+    }
+
+    /**
+     * Create testimonial from completed order.
+     */
+    public function createTestimonial(Request $request, Order $order)
+    {
+        // Check if testimonial already exists for this order
+        $existingTestimonial = Testimonial::where('order_id', $order->id)->first();
+        if ($existingTestimonial) {
+            return back()->with('error', 'You have already submitted a testimonial for this order.');
+        }
+
+        $request->validate([
+            'author' => 'required|string|max:255',
+            'role' => 'required|string|max:255',
+            'content' => 'required|string|max:1000',
+            'rating' => 'required|integer|min:1|max:5',
+        ]);
+
+        Testimonial::create([
+            'author' => $request->author,
+            'role' => $request->role,
+            'content' => $request->content,
+            'rating' => $request->rating,
+            'status' => false, // Requires admin approval
+            'sort_order' => Testimonial::max('sort_order') + 1,
+            'order_id' => $order->id,
+        ]);
+
+        return back()->with('success', 'Thank you for your feedback! Your testimonial has been submitted for review.');
     }
 }

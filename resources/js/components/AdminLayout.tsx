@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutDashboard, Users, Package, Settings, LogOut, Menu, X, BarChart3, ChefHat, UserCheck } from 'lucide-react';
+import { LayoutDashboard, Users, Package, Settings, LogOut, Menu, X, BarChart3, ChefHat, UserCheck, MessageSquare } from 'lucide-react';
 import { usePage, Link } from '@inertiajs/react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -25,7 +25,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     const toggleTheme = () => {
         const newTheme = theme === 'light' ? 'dark' : 'light';
         setTheme(newTheme);
-        localStorage.setItem('theme', newTheme);
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('theme', newTheme);
+        }
     };
 
     const adminNavItems = [
@@ -33,34 +35,40 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             name: 'Dashboard',
             href: '/admin/dashboard',
             icon: LayoutDashboard,
-            current: window.location.pathname === '/admin/dashboard'
+            current: typeof window !== 'undefined' ? window.location.pathname === '/admin/dashboard' : false
         },
         {
             name: 'Orders',
             href: '/admin/orders',
             icon: Package,
-            current: window.location.pathname === '/admin/orders'
+            current: typeof window !== 'undefined' ? window.location.pathname === '/admin/orders' : false
         },
         // Only show Users link for CEOs
         ...(auth?.user?.role === 'ceo' ? [{
             name: 'Users',
             href: '/admin/users',
             icon: Users,
-            current: window.location.pathname === '/admin/users'
+            current: typeof window !== 'undefined' ? window.location.pathname === '/admin/users' : false
         }] : []),
         // Only show Menu link for CEOs
         ...(auth?.user?.role === 'ceo' ? [{
             name: 'Menu',
             href: '/admin/menu',
             icon: ChefHat,
-            current: window.location.pathname === '/admin/menu'
+            current: typeof window !== 'undefined' ? window.location.pathname === '/admin/menu' : false
         }] : []),
-        {
+        // Show Testimonials and Settings links for CEOs and Editors
+        ...(auth?.user?.role === 'ceo' || auth?.user?.role === 'editor' ? [{
+            name: 'Testimonials',
+            href: '/admin/testimonials',
+            icon: MessageSquare,
+            current: typeof window !== 'undefined' ? window.location.pathname === '/admin/testimonials' : false
+        }, {
             name: 'Settings',
-            href: '/admin/settings',
+            href: '/admin/site-settings',
             icon: Settings,
-            current: window.location.pathname === '/admin/settings'
-        },
+            current: typeof window !== 'undefined' ? window.location.pathname === '/admin/site-settings' : false
+        }] : []),
     ];
 
     return (
@@ -88,9 +96,38 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                                 <p className="text-sm font-medium text-zinc-950 dark:text-zinc-100 truncate">
                                     {auth.user?.name}
                                 </p>
-                                <p className="text-xs text-zinc-500 dark:text-zinc-400 capitalize">
-                                    {auth.user?.role}
-                                </p>
+                                <select
+                                    value={auth.user?.role || ''}
+                                    onChange={(e) => {
+                                        console.log('Switching role to:', e.target.value);
+                                        fetch('/dev/switch-role', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+                                            },
+                                            body: JSON.stringify({ role: e.target.value }),
+                                        })
+                                        .then(response => {
+                                            console.log('Response:', response);
+                                            return response.json();
+                                        })
+                                        .then(data => {
+                                            console.log('Data:', data);
+                                            window.location.reload();
+                                        })
+                                        .catch(error => {
+                                            console.error('Error:', error);
+                                        });
+                                    }}
+                                    className="w-full text-xs bg-transparent border-none text-zinc-500 dark:text-zinc-400 capitalize focus:outline-none focus:text-zinc-700 dark:focus:text-zinc-300"
+                                >
+                                    <option value="customer">Customer</option>
+                                    <option value="chef">Chef</option>
+                                    <option value="waiter">Waiter</option>
+                                    <option value="editor">Editor</option>
+                                    <option value="ceo">CEO</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -178,7 +215,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <main className="flex-1 overflow-y-auto">
                     <AnimatePresence mode="wait">
                         <motion.div
-                            key={window.location.pathname}
+                            key={typeof window !== 'undefined' ? window.location.pathname : 'page'}
                             initial={{ opacity: 0, y: 12 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -12 }}

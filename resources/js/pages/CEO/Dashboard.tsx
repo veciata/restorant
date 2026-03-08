@@ -24,7 +24,7 @@ export default function Dashboard() {
         },
         {
             title: 'Total Revenue',
-            value: `$${stats.total_revenue.toFixed(2)}`,
+            value: `$${parseFloat(stats.total_revenue || 0).toFixed(2)}`,
             icon: DollarSign,
             color: 'text-yellow-600',
             bgColor: 'bg-yellow-50',
@@ -123,7 +123,7 @@ export default function Dashboard() {
                             </div>
                             <div className="flex justify-between items-center">
                                 <span className="text-gray-600 dark:text-zinc-400">Revenue</span>
-                                <span className="font-bold text-zinc-950 dark:text-zinc-100">${stats.weekly_revenue.toFixed(2)}</span>
+                                <span className="font-bold text-zinc-950 dark:text-zinc-100">${parseFloat(stats.weekly_revenue || 0).toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between items-center">
                                 <span className="text-gray-600 dark:text-zinc-400">New Users</span>
@@ -145,7 +145,7 @@ export default function Dashboard() {
                             </div>
                             <div className="flex justify-between items-center">
                                 <span className="text-gray-600 dark:text-zinc-400">Revenue</span>
-                                <span className="font-bold text-zinc-950 dark:text-zinc-100">${stats.monthly_revenue.toFixed(2)}</span>
+                                <span className="font-bold text-zinc-950 dark:text-zinc-100">${parseFloat(stats.monthly_revenue || 0).toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between items-center">
                                 <span className="text-gray-600 dark:text-zinc-400">New Users</span>

@@ -1,8 +1,8 @@
-import React from 'react';
 import { Head, usePage } from '@inertiajs/react';
-import AdminLayout from '../../components/AdminLayout';
 import { motion } from 'framer-motion';
 import { Users, Clock, CheckCircle, Table, Package } from 'lucide-react';
+import React from 'react';
+import AdminLayout from '../../components/AdminLayout';
 
 interface WaiterDashboardProps {
     activeOrders: Array<{

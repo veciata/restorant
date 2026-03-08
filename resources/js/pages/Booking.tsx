@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
 import { Head, usePage, router } from '@inertiajs/react';
-import Layout from '../components/Layout';
-import TableScene from '../components/booking/TableScene';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, Users, Clock, ArrowRight, CheckCircle2, MapPin } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import TableScene from '../components/booking/TableScene';
+import Layout from '../components/Layout';
 
 export default function Booking() {
     const { tables, workingHours, filters } = usePage().props as any;
@@ -13,6 +13,23 @@ export default function Booking() {
     const [date, setDate] = useState(filters?.date || new Date().toISOString().split('T')[0]);
     const [time, setTime] = useState(filters?.time || '19:30');
     const [guests, setGuests] = useState(filters?.guests || 2);
+    
+    const prevFiltersRef = useRef({ date, time, guests });
+    
+    // Reset table selection when filters change
+    useEffect(() => {
+        const { date: prevDate, time: prevTime, guests: prevGuests } = prevFiltersRef.current;
+        
+        if (prevDate !== date || prevTime !== time || prevGuests !== guests) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setSelectedTableId(currentId => {
+                // Only reset if there's currently a table selected
+                return currentId ? null : currentId;
+            });
+        }
+        
+        prevFiltersRef.current = { date, time, guests };
+    }, [date, time, guests]);
     
     // Working hours from database
     const workingHoursData = workingHours || {
@@ -65,10 +82,6 @@ export default function Booking() {
     
     // Check time slot availability for selected table
     const isTimeSlotAvailable = (timeStr: string, tableId: number) => {
-        const bookingDateTime = new Date(`${date} ${timeStr}`);
-        const timeStart = new Date(bookingDateTime.getTime() - 30 * 60 * 1000); // 30 min before
-        const timeEnd = new Date(bookingDateTime.getTime() + 30 * 60 * 1000); // 30 min after
-        
         // Check if any existing booking conflicts with this time slot
         return !tables?.some((table: any) => {
             if (table.id !== tableId) return false;
@@ -83,12 +96,6 @@ export default function Booking() {
     const updateFilters = () => {
         router.get('/booking', { date, time, guests }, { preserveState: false });
     };
-    
-    useEffect(() => {
-        if (selectedTableId) {
-            setSelectedTableId(null); // Reset selection when filters change
-        }
-    }, [date, time, guests]);
 
     return (
         <Layout>

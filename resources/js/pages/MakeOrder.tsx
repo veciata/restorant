@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
 import { Head, usePage, useForm } from '@inertiajs/react';
-import Layout from '../components/Layout';
 import { motion } from 'framer-motion';
-import { Plus, Minus, ShoppingCart, Utensils, MapPin, CheckCircle, X } from 'lucide-react';
+import { Plus, Minus, ShoppingCart, Utensils, MapPin, CheckCircle } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import Layout from '../components/Layout';
 
 export default function MakeOrder() {
     const { menuItems, tables } = usePage().props as any;
@@ -13,7 +13,7 @@ export default function MakeOrder() {
             if (savedCart) {
                 try {
                     return JSON.parse(savedCart);
-                } catch (e) {
+                } catch {
                     return [];
                 }
             }
@@ -22,7 +22,7 @@ export default function MakeOrder() {
     });
     const [selectedTable, setSelectedTable] = useState('');
 
-    const { data, setData, post, processing, errors } = useForm<{
+    const { data, setData, post, processing } = useForm<{
         items: { menu_item_id: number; quantity: number; notes: string }[];
         table_id: string;
         notes: string;
@@ -72,14 +72,6 @@ export default function MakeOrder() {
 
     const removeFromCart = (menuItemId: number) => {
         setCart(cart.filter(item => item.menu_item_id !== menuItemId));
-    };
-
-    const updateNotes = (menuItemId: number, notes: string) => {
-        setCart(cart.map(item =>
-            item.menu_item_id === menuItemId
-                ? { ...item, notes }
-                : item
-        ));
     };
 
     const getTotalPrice = () => {
@@ -209,7 +201,7 @@ export default function MakeOrder() {
                                     {cart.length === 0 ? (
                                         <p className="text-gray-500 text-center py-8">Your cart is empty</p>
                                     ) : (
-                                        cart.map((item, index) => (
+                                        cart.map((item) => (
                                             <motion.div
                                                 key={item.menu_item_id}
                                                 initial={{ opacity: 0, x: -20 }}

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
 import { Head, usePage, useForm } from '@inertiajs/react';
-import Layout from '../components/Layout';
 import { motion } from 'framer-motion';
-import { User, Mail, Phone, MapPin, Calendar, Edit, Save, X } from 'lucide-react';
+import { User, Mail, Phone, Calendar, Edit, Save, X } from 'lucide-react';
+import React, { useState } from 'react';
+import Layout from '../components/Layout';
 
 export default function Account() {
     const { auth } = usePage().props;

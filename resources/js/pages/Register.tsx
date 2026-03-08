@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
-import Layout from '../components/Layout';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight, Utensils } from 'lucide-react';
+import React, { useState } from 'react';
+import Layout from '../components/Layout';
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({

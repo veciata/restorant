@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Head, usePage, Link } from '@inertiajs/react';
-import Layout from '../components/Layout';
+import { Head, usePage, Link, router } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Filter, ShoppingCart, Star, Plus, Minus, Utensils } from 'lucide-react';
+import { Search, Filter, ShoppingCart, Star, Plus, Utensils } from 'lucide-react';
+import React, { useState } from 'react';
+import Layout from '../components/Layout';
 
 export default function Menu() {
     const { menuItems, categories } = usePage().props as any;
@@ -23,7 +23,7 @@ export default function Menu() {
     const handleAddToCart = (item: any) => {
         // For now, redirect to make-order page
         // In a real app, this would add to cart and show cart modal
-        window.location.href = `/make-order?item=${item.id}`;
+        router.visit(`/make-order?item=${item.id}`);
     };
 
     return (
@@ -144,7 +144,7 @@ export default function Menu() {
                                         </div>
                                         <div className="absolute top-6 right-6 bg-black/60 backdrop-blur-sm border border-white/20 p-2 rounded-full flex items-center gap-1.5 px-3">
                                             <Star className="h-3 w-3 text-orange-400 fill-orange-400" />
-                                            <span className="text-[10px] font-bold text-white">4.{Math.floor(Math.random() * 5) + 5}</span>
+                                            <span className="text-[10px] font-bold text-white">4.8</span>
                                         </div>
                                     </div>
                                     <div className="px-4 space-y-3">

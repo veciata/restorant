@@ -1,7 +1,7 @@
-import React from 'react';
 import { Head } from '@inertiajs/react';
-import Layout from '../components/Layout';
 import { motion } from 'framer-motion';
+import React from 'react';
+import Layout from '../components/Layout';
 
 export default function About() {
     return (

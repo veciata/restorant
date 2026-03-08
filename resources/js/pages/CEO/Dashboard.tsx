@@ -1,8 +1,8 @@
-import React from 'react';
 import { Head, usePage } from '@inertiajs/react';
-import AdminLayout from '../../components/AdminLayout';
 import { motion } from 'framer-motion';
 import { BarChart3, Users, DollarSign, Package, TrendingUp, Clock, CheckCircle, AlertCircle } from 'lucide-react';
+import React from 'react';
+import AdminLayout from '../../components/AdminLayout';
 
 export default function Dashboard() {
     const { stats } = usePage().props as any;

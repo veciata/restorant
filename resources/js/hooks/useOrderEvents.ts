@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { usePage } from '@inertiajs/react';
 
 interface OrderEvent {
     type: 'created' | 'status_updated';
@@ -11,7 +10,6 @@ interface OrderEvent {
 
 export function useOrderEvents() {
     const [lastEvent, setLastEvent] = useState<OrderEvent | null>(null);
-    const { props } = usePage();
 
     useEffect(() => {
         // Set up Server-Sent Events connection

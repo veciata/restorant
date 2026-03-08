@@ -1,6 +1,6 @@
-import React, { Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera, Environment, ContactShadows } from '@react-three/drei';
+import { Canvas } from '@react-three/fiber';
+import React, { Suspense } from 'react';
 import TableMesh from './TableMesh';
 
 interface Table {

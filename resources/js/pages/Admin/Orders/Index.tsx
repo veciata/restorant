@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
 import { Head, usePage, router } from '@inertiajs/react';
-import AdminLayout from '../../../components/AdminLayout';
 import { motion } from 'framer-motion';
-import { Package, Calendar, Clock, MapPin, CheckCircle, XCircle, AlertCircle, Search, Filter, Eye, Edit, DollarSign, Plus } from 'lucide-react';
+import { Package, CheckCircle, XCircle, AlertCircle, Search, Filter, Eye, Edit, Plus } from 'lucide-react';
+import React, { useState } from 'react';
+import AdminLayout from '../../../components/AdminLayout';
 
 export default function Index() {
     const { orders } = usePage().props as any;

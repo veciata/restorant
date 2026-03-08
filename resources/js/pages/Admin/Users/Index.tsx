@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
 import { Head, usePage, useForm } from '@inertiajs/react';
-import AdminLayout from '../../../components/AdminLayout';
 import { motion } from 'framer-motion';
-import { Users, Crown, UserCheck, DollarSign, Plus, X } from 'lucide-react';
+import { Users, Crown, UserCheck, DollarSign, X } from 'lucide-react';
+import React, { useState } from 'react';
+import AdminLayout from '../../../components/AdminLayout';
 
 export default function Index() {
     const { users } = usePage().props as any;
     const [selectedUser, setSelectedUser] = useState<any>(null);
     const [showBonusModal, setShowBonusModal] = useState(false);
 
-    const { data, setData, post, processing, errors, recentlySuccessful, reset } = useForm({
+    const { data, setData, post, processing, errors, reset } = useForm({
         bonus_amount: '',
         bonus_reason: '',
     });

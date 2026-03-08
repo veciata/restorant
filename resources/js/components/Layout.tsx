@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { usePage, Link } from '@inertiajs/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Facebook,
     Instagram,
     Twitter,
     Utensils,
-    Calendar,
-    MapPin,
     Search,
     ShoppingBag,
     Sun,
@@ -17,7 +15,7 @@ import {
     Package,
     Settings,
 } from 'lucide-react';
-import { usePage, Link } from '@inertiajs/react';
+import React, { useState, useEffect } from 'react';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     const { auth, url, workingHours } = usePage().props as any;
@@ -35,7 +33,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 try {
                     const cartItems = JSON.parse(cart);
                     return cartItems.reduce((total: number, item: any) => total + item.quantity, 0);
-                } catch (e) {
+                } catch {
                     return 0;
                 }
             }
@@ -60,7 +58,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 try {
                     const cartItems = JSON.parse(cart);
                     setCartCount(cartItems.reduce((total: number, item: any) => total + item.quantity, 0));
-                } catch (e) {
+                } catch {
                     setCartCount(0);
                 }
             } else {

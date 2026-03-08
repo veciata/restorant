@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
 import { Head, usePage, Link, router } from '@inertiajs/react';
-import AdminLayout from '../../components/AdminLayout';
 import { motion } from 'framer-motion';
 import { Save, ArrowLeft, Image, Type, Star, MessageSquare, Plus, Trash2, Edit } from 'lucide-react';
+import React, { useState } from 'react';
+import AdminLayout from '../../components/AdminLayout';
 
 interface SiteSettingsPageProps {
     settings: {

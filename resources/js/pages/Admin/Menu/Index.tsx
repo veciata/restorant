@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
 import { Head, usePage, useForm } from '@inertiajs/react';
-import AdminLayout from '../../../components/AdminLayout';
 import { motion } from 'framer-motion';
-import { ChefHat, Plus, Edit, Trash2, ToggleLeft, ToggleRight, X, Save } from 'lucide-react';
+import { ChefHat, Plus, Edit, Trash2, ToggleLeft, ToggleRight, X } from 'lucide-react';
+import React, { useState } from 'react';
+import AdminLayout from '../../../components/AdminLayout';
 
 export default function Index() {
     const { menuItems, categories } = usePage().props as any;
@@ -90,16 +90,6 @@ export default function Index() {
             alert('Failed to toggle availability');
         });
     };
-
-    // Group menu items by category
-    const groupedItems = menuItems.reduce((acc: any, item: any) => {
-        const categoryName = item.category?.name || 'Uncategorized';
-        if (!acc[categoryName]) {
-            acc[categoryName] = [];
-        }
-        acc[categoryName].push(item);
-        return acc;
-    }, {});
 
     return (
         <AdminLayout>

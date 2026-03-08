@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Head, usePage, router, Link } from '@inertiajs/react';
-import Layout from '../components/Layout';
+import { Head, usePage, router } from '@inertiajs/react';
 import { Star, MessageSquare } from 'lucide-react';
+import React, { useState } from 'react';
+import Layout from '../components/Layout';
 
 // Define the order data structure to match backend
 interface OrderItem {
@@ -33,11 +33,6 @@ interface Order {
         estimated: string;
         delivered: string | null;
     };
-}
-
-interface OrdersPageProps {
-    orders: Order[];
-    [key: string]: any;
 }
 
 export default function Orders() {
@@ -117,7 +112,7 @@ export default function Orders() {
 
                     {/* Orders List */}
                     <div className="space-y-6">
-                        {safeOrders.map((order: Order, index: number) => (
+                        {safeOrders.map((order: Order) => (
                             <div
                                 key={order.id}
                                 className="bg-white rounded-lg border border-zinc-100 shadow overflow-hidden"

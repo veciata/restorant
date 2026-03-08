@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
 import { Head } from '@inertiajs/react';
-import Layout from '../components/Layout';
 import { motion } from 'framer-motion';
 import { Package, Truck, Clock, CheckCircle2, ChevronRight, Search } from 'lucide-react';
+import React, { useState } from 'react';
+import Layout from '../components/Layout';
 
 export default function TrackOrder() {
     const [orderId, setOrderId] = useState('');

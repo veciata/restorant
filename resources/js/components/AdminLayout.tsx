@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutDashboard, Users, Package, Settings, LogOut, Menu, X, BarChart3, ChefHat, UserCheck, MessageSquare } from 'lucide-react';
 import { usePage, Link } from '@inertiajs/react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { LayoutDashboard, Users, Package, Settings, LogOut, Menu, BarChart3, ChefHat, MessageSquare } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
     const { auth } = usePage().props;
@@ -97,7 +97,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                                     {auth.user?.name}
                                 </p>
                                 <select
-                                    value={auth.user?.role || ''}
+                                    value={String(auth.user?.role || '')}
                                     onChange={(e) => {
                                         console.log('Switching role to:', e.target.value);
                                         fetch('/dev/switch-role', {

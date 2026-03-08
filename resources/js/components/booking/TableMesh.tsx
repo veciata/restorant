@@ -1,7 +1,6 @@
-import React, { useRef, useState } from 'react';
-import { useFrame } from '@react-three/fiber';
 import { Text, Html } from '@react-three/drei';
-import * as THREE from 'three';
+import React, { useRef, useState } from 'react';
+import type * as THREE from 'three';
 
 interface TableMeshProps {
     id: number;
@@ -11,7 +10,7 @@ interface TableMeshProps {
     onClick: () => void;
 }
 
-export default function TableMesh({ id, number, position, status, onClick }: TableMeshProps) {
+export default function TableMesh({ number, position, status, onClick }: TableMeshProps) {
     const meshRef = useRef<THREE.Mesh>(null);
     const [hovered, setHovered] = useState(false);
 

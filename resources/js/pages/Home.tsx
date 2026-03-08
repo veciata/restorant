@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
 import { Head, Link, usePage, router } from '@inertiajs/react';
-import Layout from '../components/Layout';
 import { motion } from 'framer-motion';
-import { ArrowRight, Star, Quote, ChevronRight, Play, Edit3, Save, X, Copy } from 'lucide-react';
+import { Star, Quote, ChevronRight, Play, Edit3, Save, X, Copy } from 'lucide-react';
+import React, { useState } from 'react';
+import Layout from '../components/Layout';
 
 interface HomePageProps {
     settings: {
@@ -59,7 +59,7 @@ export default function Home() {
                     alert('Error saving changes');
                 },
             });
-        } catch (error) {
+        } catch {
             setIsSaving(false);
             alert('Error saving changes');
         }

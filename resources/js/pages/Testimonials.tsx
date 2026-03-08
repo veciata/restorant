@@ -1,8 +1,8 @@
-import React from 'react';
 import { Head, usePage, Link } from '@inertiajs/react';
-import Layout from '../components/Layout';
 import { motion } from 'framer-motion';
 import { Quote, Star, ArrowLeft } from 'lucide-react';
+import React from 'react';
+import Layout from '../components/Layout';
 
 interface Testimonial {
     id: number;

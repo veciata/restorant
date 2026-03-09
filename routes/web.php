@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminMenuController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrderEventsController;
@@ -20,6 +21,12 @@ Route::get('/booking', [BookingController::class, 'index'])->name('booking');
 Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
 Route::inertia('/about', 'About')->name('about');
 Route::inertia('/track-order', 'TrackOrder')->name('track-order');
+Route::inertia('/terms', 'Terms')->name('terms');
+Route::inertia('/privacy', 'Privacy')->name('privacy');
+
+// Image Caching Routes
+Route::get('/images/{path}', [ImageController::class, 'show'])->where('path', '.*')->name('images.show')->middleware('image.cache');
+Route::post('/admin/images/clear-cache', [ImageController::class, 'clearCache'])->name('images.clear-cache');
 
 // Order Creation
 Route::middleware(['auth'])->group(function () {

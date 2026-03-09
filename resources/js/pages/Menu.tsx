@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Filter, ShoppingCart, Star, Plus, Utensils } from 'lucide-react';
 import React, { useState } from 'react';
 import Layout from '../components/Layout';
+import OptimizedImage from '../components/OptimizedImage';
 
 export default function Menu() {
     const { menuItems, categories } = usePage().props as any;
@@ -122,12 +123,14 @@ export default function Menu() {
                                     className="group relative"
                                 >
                                     <div className="aspect-[4/5] overflow-hidden rounded-[2.5rem] shadow-2xl shadow-black/5 ring-1 ring-black/5 mb-8 relative">
-                                        <motion.img
-                                            whileHover={{ scale: 1.08 }}
-                                            transition={{ duration: 0.6 }}
+                                        <OptimizedImage
                                             src={item.image_url || 'https://images.unsplash.com/photo-1544145945-f904253d0c7b?q=80&w=800&auto=format&fit=crop'}
-                                            className="h-full w-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition duration-700"
                                             alt={item.name}
+                                            width={400}
+                                            height={500}
+                                            quality={85}
+                                            format="auto"
+                                            className="h-full w-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition duration-700"
                                         />
                                         <div className="absolute top-6 left-6 flex flex-col gap-2">
                                             <span className="bg-white/95 backdrop-blur-sm px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-zinc-950 shadow-sm">{item.category}</span>

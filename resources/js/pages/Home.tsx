@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Star, Quote, ChevronRight, Play, Edit3, Save, X, Copy } from 'lucide-react';
 import React, { useState } from 'react';
 import Layout from '../components/Layout';
+import OptimizedImage from '../components/OptimizedImage';
 
 interface HomePageProps {
     settings: {
@@ -235,10 +236,14 @@ export default function Home() {
                             animate={{ opacity: 1, scale: 1, rotate: 0 }}
                             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
                             className="aspect-square overflow-hidden rounded-[4rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)] ring-[20px] ring-white">
-                            <img
+                            <OptimizedImage
                                 src={settings.hero_image}
-                                className="h-full w-full object-cover grayscale-[0.1]"
                                 alt="Signature Dish"
+                                width={800}
+                                height={800}
+                                quality={90}
+                                format="webp"
+                                className="h-full w-full object-cover grayscale-[0.1]"
                             />
                         </motion.div>
                         {/* Floating elements */}

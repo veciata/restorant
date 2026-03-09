@@ -18,7 +18,7 @@ import {
 import React, { useState, useEffect } from 'react';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-    const { auth, url, workingHours } = usePage().props as any;
+    const { auth, url, workingHours, settings } = usePage().props as any;
     const [theme, setTheme] = useState(() => {
         if (typeof window !== 'undefined') {
             return localStorage.getItem('theme') || 'light';
@@ -127,7 +127,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                             <Utensils className="h-8 w-8 text-orange-600" />
                             <a href="/">
                                 <span className="text-xl font-bold tracking-tight text-gray-900 uppercase dark:text-white">
-                                    Restorant
+                                    {settings?.site_name || 'Restorant'}
                                 </span>
                             </a>
                         </motion.div>
@@ -322,12 +322,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                             <div className="mb-6 flex items-center gap-2">
                                 <Utensils className="h-6 w-6 text-orange-600" />
                                 <span className="text-lg font-bold tracking-tight text-gray-900 uppercase dark:text-white">
-                                    Regal Resto
+                                    {settings?.site_name || 'Regal Resto'}
                                 </span>
                             </div>
                             <p className="max-w-xs leading-relaxed text-gray-600 dark:text-gray-200">
-                                Indulge in an exquisite culinary journey where tradition meets innovation. Our chef's carefully crafted
-                                menu promises an unforgettable experience for your palate.
+                                {settings?.site_description || 'Indulge in an exquisite culinary journey where tradition meets innovation. Our chef\'s carefully crafted menu promises an unforgettable experience for your palate.'}
                             </p>
                         </div>
 
@@ -397,7 +396,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                         </div>
                     </div>
                     <div className="mt-20 flex items-center justify-between border-t border-gray-100 pt-8 text-xs text-gray-500 dark:border-gray-900 dark:text-gray-400">
-                        <p>&copy; 2026 Regal Resto. All rights reserved.</p>
+                        <p>&copy; 2026 {settings?.site_name || 'Regal Resto'}. All rights reserved.</p>
                         <div className="flex gap-8 font-medium tracking-widest uppercase">
                             <Link href="/terms" className={`transition ${isActive('/terms') ? 'text-orange-600' : 'hover:text-orange-600'}`}>
                                 Terms
